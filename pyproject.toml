@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fxwidth"
+version = "0.1.0"
+description = "Fixed Width Column Parser for Python using Dataclasses"
+# We are missing one important contributor
+authors = [
+    "Christian Meredith <ceigey@users.noreply.github.com>",
+    "Stella Xu <32760316+StellaXu0712@users.noreply.github.com>",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
