@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Fixed Width Column Parser for Python using Dataclasses"
 # We are missing one important contributor
 authors = [
+    "Ariff Nordin <72339230+AriffNordin@users.noreply.github.com>",
     "Christian Meredith <ceigey@users.noreply.github.com>",
     "Stella Xu <32760316+StellaXu0712@users.noreply.github.com>",
 ]
