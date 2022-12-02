@@ -3,9 +3,9 @@ __version__ = '0.1.0'
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, fields, is_dataclass
 from typing import Any, Optional
-from coders import ColumnCoder
-from validators import ColumnValidator
-from alignments import Alignment
+from fxwidth.coders import ColumnCoder
+from fxwidth.validators import ColumnValidator
+from fxwidth.alignments import Alignment
 
 # This constant stores where the column definition will be stored
 FIELD_METADATA_NAMESPACE = 'fxwidth_columndef'
@@ -101,6 +101,7 @@ class RecordQuery:
     def get_column_items_sorted(dc) -> list[tuple[str, ColumnDefinition]]:
         items = RecordQuery.get_column_items(dc)
         items.sort(key=lambda t: t[1].slice.start)
+        return items
 
     @staticmethod
     def count_columns(dc) -> int:
@@ -124,7 +125,7 @@ class Record(ABC):
         return dc(**entries)
 
     @abstractmethod
-    def encode(dc, string):
+    def encode(dc):
         if not RecordQuery.has_columns(dc):
             raise Exception(
                 'Can only encode dataclasses with column definitions')
@@ -150,10 +151,17 @@ class Record(ABC):
     # e.g. kwards in a decorator? worried...
 
     @staticmethod
-    def configure(dc=None, *, rstrip=True):
+    def default(dc):
+        return Record.configure()(dc)
+        
+    @staticmethod
+    def configure(*, rstrip=True):
         def record_decorator(dc):
             if isinstance(dc, Record):
                 return dc
+
+            if not is_dataclass(dc):
+                dc = dataclass(dc)
 
             if not RecordQuery.has_columns(dc):
                 raise Exception(
@@ -164,15 +172,12 @@ class Record(ABC):
                 return Record.decode(dc, string)
 
             def encode(self):
-                string = Record.encode(dc, string)
+                string = Record.encode(self)
                 return string.rstrip() if rstrip else string
 
             dc.decode = decode
             dc.encode = encode
             dc.__setattr__ = Record.__setattr__
             return dc
-
-        if (dc is None):
-            return record_decorator
-        else:
-            return record_decorator(dc)
+        
+        return record_decorator

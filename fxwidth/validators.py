@@ -62,3 +62,13 @@ class ClockValidator(ColumnValidator):
 
         # Clock is stored in 24 hours, stored like a clock (25.00 -> 1.00)
         return new % 24
+
+    
+class EqualityValidator(ColumnValidator):
+    def __init__(self, value):
+        self.value = value
+    def validate(self, instance, new, kind):
+        if not self.value == new:
+            raise Exception('Not the right value')
+        return new
+            

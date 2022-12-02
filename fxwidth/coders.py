@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from alignments import Alignment
+from fxwidth.alignments import Alignment
 
 
 class ColumnCoder(ABC):
